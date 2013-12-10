@@ -4,8 +4,10 @@ project(turtlebot_movement)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED COMPONENTS roscpp rospy sensor_msgs genmsg)
-#find_package(Boost REQUIRED)
+find_package(catkin REQUIRED COMPONENTS
+                roscpp rospy sensor_msgs cv_bridge
+                message_generation image_transport)
+find_package(OpenCV 2 REQUIRED)
 
 ################################################
 ## Declare ROS messages, services and actions ##
@@ -62,10 +64,12 @@ find_package(catkin REQUIRED COMPONENTS roscpp rospy sensor_msgs genmsg)
 ## catkin specific configuration ##
 ###################################
 catkin_package(
-  INCLUDE_DIRS ${catkin_INCLUDE_DIRS}
-#  LIBRARIES turtle
-  CATKIN_DEPENDS sensor_msgs
-  DEPENDS Boost
+# INCLUDE_DIRS include
+  LIBRARIES ${PROJECT_NAME}
+  CATKIN_DEPENDS
+    sensor_msgs std_msgs cv_bridge
+    roscpp rospy message_generation image_transport
+  DEPENDS opencv2
 )
 
 ###########
@@ -85,7 +89,7 @@ include_directories(
 
 ## Declare a cpp executable
 add_executable(color_reg src/color_reg.cpp)
-target_link_libraries(color_reg ${catkin_LIBRARIES})
+target_link_libraries(color_reg ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 add_dependencies(color_reg ${catkin_EXPORTED_TARGETS})
 
 #############
